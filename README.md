@@ -1,27 +1,41 @@
-# DO NOT USE THIS
+# ternary
 
-YOU HAVE BETTER review your database schema and client rquirements of API response.
+Ternary expression for golang.
 
-I don't want to write such fuckin' code any more.
+I just want to write DRY code... :(
 
-```go
-response := map[stirng]interface{}{
-	"expire": func() interface{} {
-		// because client requires "expire" field as "null"
-		if user.Expire.IsZero() {
-			return nil
-		}
-		return user.Expire
-	}(),
-}
-```
+# why
 
-to be
+- code golf
 
 ```go
-response := map[stirng]interface{}{
-    "expire": ternary.Returns((user.Expire.IsZero()), nil, user.Expire),
+// want
+status := "Waiting"
+if flag {
+    status = "Ready"
 }
+
+// write
+status := ternary.If(flag).String("Ready", "Waiting")
 ```
 
-# つらい
+- value or `nil`
+
+```go
+// when client requires "or null" field
+res := map[string]interface{}{
+    "name":   user.Name,
+    "expire": func() interace{} {
+        if user.Expire.IsZero() {
+            return nil
+        }
+        return user.Expire
+    },
+}
+
+// write
+res := map[string]interface{}{
+    "name":   user.Name,
+    "expire": ternary.Returns(user.Expire.IsZero(), nil, user.Expire),
+}
+```
