@@ -6,21 +6,56 @@ import (
 	. "github.com/otiai10/mint"
 )
 
-func TestReturns(t *testing.T) {
-	Expect(t, Returns(true, nil, "foo")).ToBe(nil)
-	Expect(t, Returns(false, nil, "bar")).ToBe("bar")
-}
-
 func TestIf(t *testing.T) {
 	Expect(t, If(true)).TypeOf("ternary.Condition")
 }
 
 func TestCondition_String(t *testing.T) {
-	cond := If(true)
-	Expect(t, cond.String("yes", "no")).ToBe("yes")
+
+	message := If(true).String("Yes!", "No...")
+	Expect(t, message).ToBe("Yes!")
+
+	message = If(false).String("Yes!", "No...")
+	Expect(t, message).ToBe("No...")
+
 }
 
 func TestCondition_Int(t *testing.T) {
-	cond := If(false)
-	Expect(t, cond.Int(200, 404)).ToBe(404)
+
+	status := If(true).Int(200, 500)
+	Expect(t, status).ToBe(200)
+
+	status = If(false).Int(200, 500)
+	Expect(t, status).ToBe(500)
+
+}
+
+func TestCondition_Interface(t *testing.T) {
+
+	status := 200
+	auth := If(status == 200).Interface("ok", nil)
+	Expect(t, auth).ToBe("ok")
+
+	status = 403
+	auth = If(status == 200).Interface("ok", nil)
+	Expect(t, auth).ToBe(nil)
+
+}
+
+func TestCondition_Place(t *testing.T) {
+
+	response := map[string]interface{}{
+		"message": "Hello, btw!",
+	}
+
+	status := 200
+	If(status != 200).Put("error", "Failed")(response)
+	_, exists := response["error"]
+	Expect(t, exists).ToBe(false)
+
+	status = 500
+	If(status != 200).Put("error", "Failed")(response)
+	value, exists := response["error"]
+	Expect(t, exists).ToBe(true)
+	Expect(t, value).ToBe("Failed")
 }

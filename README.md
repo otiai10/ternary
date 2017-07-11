@@ -1,41 +1,46 @@
 # ternary
 
-Ternary expression for golang.
+Ternary expression for golang, to enjoy code-golf :golf:
 
-I just want to write DRY code... :(
+[![Build Status](https://travis-ci.org/otiai10/ternary.svg?branch=master)](https://travis-ci.org/otiai10/ternary)
 
 # why
 
-- code golf
+If you want
 
 ```go
-// want
-status := "Waiting"
+status := 500
 if flag {
-    status = "Ready"
+    status = 200
 }
-
-// write
-status := ternary.If(flag).String("Ready", "Waiting")
 ```
 
-- value or `nil`
+Write
 
 ```go
-// when client requires "or null" field
-res := map[string]interface{}{
-    "name":   user.Name,
-    "expire": func() interace{} {
-        if user.Expire.IsZero() {
-            return nil
-        }
-        return user.Expire
-    },
-}
-
-// write
-res := map[string]interface{}{
-    "name":   user.Name,
-    "expire": ternary.Returns(user.Expire.IsZero(), nil, user.Expire),
-}
+status := ternary.If(flag).Int(200, 500)
 ```
+
+If you want
+
+```go
+res := map[string]interface{}{
+    "user":       user,
+    "expired_at": nil,
+}
+if user.Expire() {
+    res["expire_at"] = time.Now()
+}
+json.NewEncoder(wr).Encode(res)
+```
+
+Write
+
+```go
+json.NewEncoder(wr).Encode(map[string]interface{}{
+    "user":       user,
+    "expired_at": ternary.If(user.Expire()).Interface(time.Now(), nil),
+})
+```
+
+Enjoy :golf: !
