@@ -1,6 +1,7 @@
 package ternary
 
 import (
+	"os"
 	"testing"
 
 	. "github.com/otiai10/mint"
@@ -58,4 +59,16 @@ func TestCondition_Place(t *testing.T) {
 	value, exists := response["error"]
 	Expect(t, exists).ToBe(true)
 	Expect(t, value).ToBe("Failed")
+}
+
+func TestZero(t *testing.T) {
+	port := Zero("").String("9090", "8080")
+	Expect(t, port).ToBe("9090")
+}
+
+func TestDefault(t *testing.T) {
+	port := Default("7777").String(os.Getenv("SPECIFIED_PORT"))
+	Expect(t, port).ToBe("7777")
+	port = Default(100).String(os.Getenv("SPECIFIED_PORT"))
+	Expect(t, port).ToBe("")
 }

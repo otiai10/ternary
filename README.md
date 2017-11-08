@@ -1,8 +1,12 @@
 # ternary
 
+[![Build Status](https://travis-ci.org/otiai10/ternary.svg?branch=master)](https://travis-ci.org/otiai10/ternary)
+
 Ternary expression for golang, to enjoy code-golf :golf:
 
-[![Build Status](https://travis-ci.org/otiai10/ternary.svg?branch=master)](https://travis-ci.org/otiai10/ternary)
+```go
+port := ternary.Default("8080").String(os.Getenv("PORT"))
+```
 
 # why
 

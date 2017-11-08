@@ -1,11 +1,20 @@
 package ternary
 
+import "reflect"
+
 // Condition represents boolean flag itself.
 type Condition bool
 
 // If construct Condition struct, to prepare to return anything.
 func If(flag bool) Condition {
 	return Condition(flag)
+}
+
+// Zero ...
+func Zero(i interface{}) Condition {
+	v := reflect.ValueOf(i)
+	t := v.Type()
+	return Condition(v.Interface() == reflect.Zero(t).Interface())
 }
 
 // Int concludes to return `int` type value, according to given condition.
