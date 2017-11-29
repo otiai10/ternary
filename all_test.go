@@ -1,7 +1,6 @@
 package ternary
 
 import (
-	"os"
 	"testing"
 
 	. "github.com/otiai10/mint"
@@ -66,9 +65,7 @@ func TestZero(t *testing.T) {
 	Expect(t, port).ToBe("9090")
 }
 
-func TestDefault(t *testing.T) {
-	port := Default("7777").String(os.Getenv("SPECIFIED_PORT"))
-	Expect(t, port).ToBe("7777")
-	port = Default(100).String(os.Getenv("SPECIFIED_PORT"))
-	Expect(t, port).ToBe("")
+func TestString(t *testing.T) {
+	Expect(t, String("foo")("bar")).ToBe("foo")
+	Expect(t, String("")("foobar")).ToBe("foobar")
 }
